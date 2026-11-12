@@ -11,6 +11,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -140,7 +143,8 @@ fun StoryPlayer(
     onKeepTakeaway: () -> Unit,
 ) {
     val context = LocalContext.current
-    val pigment = pigmentFor(story.topic)
+    val art = artFor(story)
+    val pigment = art.color
     val scenes = story.played
     val lastIndex = scenes.lastIndex
 
@@ -323,12 +327,31 @@ private fun SceneLayout(visual: @Composable () -> Unit, caption: @Composable () 
 @Composable
 private fun SceneVisual(story: Story, scene: Scene, pigment: Color, p: () -> Float) {
     when (scene.kind) {
-        "title" -> Column(Modifier.fillMaxWidth()) {
+        "title" -> Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+            val cover = artFor(story).cover
+            if (cover != null) {
+                // The cover settles into place as the story opens.
+                Image(
+                    painter = painterResource(cover),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .weight(1f, fill = false)
+                        .aspectRatio(0.8f, matchHeightConstraintsFirst = true)
+                        .clip(FolioShape)
+                        .graphicsLayer {
+                            val s = 1.07f - 0.07f * ease(stage(p(), 0f, 0.9f))
+                            scaleX = s
+                            scaleY = s
+                        },
+                )
+                Spacer(Modifier.height(22.dp))
+            }
             Text(story.topic, style = Type.Margin.copy(fontSize = 18.sp), color = pigment)
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(6.dp))
             Text(
                 story.title,
-                style = Type.Display.copy(fontSize = 50.sp, lineHeight = 52.sp),
+                style = Type.Display.copy(fontSize = 44.sp, lineHeight = 47.sp),
                 color = Ink.Vellum,
                 modifier = Modifier.graphicsLayer {
                     val a = ease(stage(p(), 0f, 0.18f))
@@ -336,7 +359,7 @@ private fun SceneVisual(story: Story, scene: Scene, pigment: Color, p: () -> Flo
                     translationY = (1f - a) * 24.dp.toPx()
                 },
             )
-            Spacer(Modifier.height(22.dp))
+            Spacer(Modifier.height(16.dp))
             Box(
                 Modifier.fillMaxWidth().height(2.dp).drawBehind {
                     drawLine(

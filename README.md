@@ -34,6 +34,9 @@ With a keyboard attached: `←` pass, `→` keep, `Enter` open, `Esc` close, `N`
 and a `kind` that picks its drawing: `title`, `words`, `number`, `timeline`, `bars`, `curve` or `list`.
 Add a story by adding an entry to that file.
 
+Cover illustrations are drawn in `art/build.py`, which writes the SVG sources to `art/` and the
+images the app uses to `res/drawable-nodpi`. Covers are matched to stories in `ui/StoryArt.kt`.
+
 ## Starter ideas
 
 `app/src/main/assets/seed.json` holds the ideas loaded on first launch: summaries, in original

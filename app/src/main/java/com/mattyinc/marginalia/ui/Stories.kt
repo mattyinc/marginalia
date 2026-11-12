@@ -1,6 +1,13 @@
 package com.mattyinc.marginalia.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,7 +46,7 @@ fun StoriesScreen(
     onOpen: (Story) -> Unit,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(250.dp),
+        columns = GridCells.Adaptive(168.dp),
         contentPadding = PaddingValues(
             start = 20.dp,
             end = 20.dp,
@@ -47,7 +54,7 @@ fun StoriesScreen(
             bottom = padding.calculateBottomPadding() + 28.dp,
         ),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+        verticalArrangement = Arrangement.spacedBy(18.dp),
         modifier = Modifier.fillMaxSize(),
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -80,55 +87,45 @@ fun StoriesScreen(
 
 @Composable
 private fun StoryCover(story: Story, seen: Boolean, modifier: Modifier = Modifier) {
-    val pigment = pigmentFor(story.topic)
-    Row(
-        modifier
-            .fillMaxWidth()
-            .height(212.dp)
-            .folioSurface()
-            .background(
-                Brush.linearGradient(
-                    colors = listOf(pigment.copy(alpha = if (seen) 0.14f else 0.36f), Color.Transparent),
-                    start = Offset.Zero,
-                    end = Offset(700f, 700f),
-                )
-            )
-            .padding(18.dp)
-    ) {
-        Box(Modifier.width(28.dp), contentAlignment = Alignment.TopStart) {
-            Text(
-                story.topic,
-                style = Type.Margin.copy(fontSize = 14.sp),
-                color = pigment,
-                maxLines = 1,
-                modifier = Modifier.alongMargin(),
-            )
-        }
-        Column(
+    val art = artFor(story)
+    Column(modifier.fillMaxWidth()) {
+        Box(
             Modifier
-                .weight(1f)
-                .fillMaxSize()
-                .drawBehind {
-                    drawLine(pigment, Offset(0f, 0f), Offset(0f, size.height), 1.5.dp.toPx())
-                }
-                .padding(start = 16.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+                .fillMaxWidth()
+                .aspectRatio(0.8f)
+                .clip(FolioShapeSmall)
+                .background(art.color.copy(alpha = 0.35f))
         ) {
-            Text(
-                story.title,
-                style = Type.Title,
-                color = if (seen) Ink.Vellum.copy(alpha = 0.75f) else Ink.Vellum,
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = when {
-                    seen -> "Watched"
-                    story.minutes == 1 -> "About 1 minute"
-                    else -> "About ${story.minutes} minutes"
-                },
-                style = Type.UiSmall,
-                color = if (seen) pigment else Ink.VellumDim,
-            )
+            if (art.cover != null) {
+                Image(
+                    painter = painterResource(art.cover),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize().graphicsLayer { alpha = if (seen) 0.62f else 1f },
+                )
+            }
+            if (seen) {
+                Text(
+                    "Watched",
+                    style = Type.UiSmall,
+                    color = Ink.Vellum,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(10.dp)
+                        .clip(CircleShape)
+                        .background(Ink.Deep.copy(alpha = 0.78f))
+                        .padding(horizontal = 11.dp, vertical = 6.dp),
+                )
+            }
         }
+        Spacer(Modifier.height(10.dp))
+        Text(story.title, style = Type.TitleSmall, color = Ink.Vellum, modifier = Modifier.padding(horizontal = 4.dp))
+        Spacer(Modifier.height(3.dp))
+        Text(
+            text = if (story.minutes == 1) "About 1 minute" else "About ${story.minutes} minutes",
+            style = Type.UiSmall,
+            color = Ink.VellumDim,
+            modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 6.dp),
+        )
     }
 }
