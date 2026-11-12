@@ -262,8 +262,18 @@ fun StoryPlayer(
                 val scene = scenes[shown]
                 // A scene that is on its way out holds its final frame.
                 val p: () -> Float = { if (shown == index) progress else 1f }
+                // Every scene between the title and the takeaway has its own illustration.
+                val artId = remember(story.id, shown) {
+                    if (scene.kind == "title" || scene.kind == "takeaway") 0
+                    else context.resources.getIdentifier(
+                        "scene_${story.id.replace('-', '_')}_$shown", "drawable", context.packageName,
+                    )
+                }
                 SceneLayout(
-                    visual = { SceneVisual(story, scene, pigment, p) },
+                    art = artId,
+                    flip = shown % 2 == 0,
+                    p = p,
+                    visual = { compact -> SceneVisual(story, scene, pigment, p, compact) },
                     caption = {
                         if (scene.kind == "takeaway") {
                             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -294,27 +304,76 @@ fun StoryPlayer(
     }
 }
 
-/** Drawing above the caption on a tall screen, beside it on a wide one. */
+/** The illustration drifts slowly while its scene plays, so the picture never sits still. */
 @Composable
-private fun SceneLayout(visual: @Composable () -> Unit, caption: @Composable () -> Unit) {
+private fun SceneArt(art: Int, flip: Boolean, p: () -> Float, modifier: Modifier = Modifier) {
+    Box(modifier.clip(FolioShape)) {
+        Image(
+            painter = painterResource(art),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize().graphicsLayer {
+                val t = p()
+                val s = 1.14f - 0.10f * t
+                scaleX = s
+                scaleY = s
+                translationX = (if (flip) -1f else 1f) * size.width * 0.03f * (1f - t)
+            },
+        )
+    }
+}
+
+/**
+ * Picture, then the animated figure, then the caption on a tall screen; picture on
+ * one side and the rest on the other on a wide one.
+ */
+@Composable
+private fun SceneLayout(
+    art: Int,
+    flip: Boolean,
+    p: () -> Float,
+    visual: @Composable (compact: Boolean) -> Unit,
+    caption: @Composable () -> Unit,
+) {
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val wide = maxWidth > 760.dp && maxWidth > maxHeight
         if (wide) {
             Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.weight(1.15f).fillMaxHeight().padding(28.dp), contentAlignment = Alignment.CenterStart) {
-                    visual()
+                    if (art != 0) {
+                        SceneArt(art, flip, p, Modifier.aspectRatio(4f / 3f))
+                    } else {
+                        visual(false)
+                    }
                 }
-                Box(Modifier.weight(0.85f).padding(28.dp), contentAlignment = Alignment.CenterStart) {
+                Column(Modifier.weight(0.85f).padding(28.dp), verticalArrangement = Arrangement.Center) {
+                    if (art != 0) {
+                        visual(false)
+                        Spacer(Modifier.height(30.dp))
+                    }
                     caption()
                 }
             }
         } else {
             Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    Modifier.weight(1f).widthIn(max = 640.dp).fillMaxWidth().padding(vertical = 18.dp, horizontal = 6.dp),
-                    contentAlignment = Alignment.CenterStart,
-                ) {
-                    visual()
+                if (art != 0) {
+                    Spacer(Modifier.height(14.dp))
+                    SceneArt(
+                        art, flip, p,
+                        Modifier.weight(1f, fill = false).widthIn(max = 640.dp).aspectRatio(4f / 3f),
+                    )
+                    Spacer(Modifier.height(18.dp))
+                    Box(Modifier.widthIn(max = 640.dp).fillMaxWidth().padding(horizontal = 6.dp)) {
+                        visual(true)
+                    }
+                    Spacer(Modifier.height(16.dp))
+                } else {
+                    Box(
+                        Modifier.weight(1f).widthIn(max = 640.dp).fillMaxWidth().padding(vertical = 18.dp, horizontal = 6.dp),
+                        contentAlignment = Alignment.CenterStart,
+                    ) {
+                        visual(false)
+                    }
                 }
                 Box(Modifier.widthIn(max = 640.dp).fillMaxWidth().padding(start = 6.dp, end = 6.dp, bottom = 22.dp)) {
                     caption()
@@ -325,7 +384,7 @@ private fun SceneLayout(visual: @Composable () -> Unit, caption: @Composable () 
 }
 
 @Composable
-private fun SceneVisual(story: Story, scene: Scene, pigment: Color, p: () -> Float) {
+private fun SceneVisual(story: Story, scene: Scene, pigment: Color, p: () -> Float, compact: Boolean = false) {
     when (scene.kind) {
         "title" -> Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
             val cover = artFor(story).cover
@@ -381,7 +440,8 @@ private fun SceneVisual(story: Story, scene: Scene, pigment: Color, p: () -> Flo
                 parts.forEachIndexed { i, word ->
                     Text(
                         word,
-                        style = Type.Display.copy(fontSize = 44.sp, lineHeight = 50.sp),
+                        style = if (compact) Type.Display.copy(fontSize = 31.sp, lineHeight = 37.sp)
+                        else Type.Display.copy(fontSize = 44.sp, lineHeight = 50.sp),
                         color = if (word.endsWith('.') || word.endsWith('?')) Ink.Vellum else Ink.Vellum.copy(alpha = 0.92f),
                         modifier = Modifier.graphicsLayer {
                             val a = ease(stage(p(), i * step, i * step + 0.14f))
@@ -399,7 +459,8 @@ private fun SceneVisual(story: Story, scene: Scene, pigment: Color, p: () -> Flo
             Column(Modifier.fillMaxWidth()) {
                 Text(
                     scene.prefix + digits + scene.suffix,
-                    style = Type.Display.copy(fontSize = 84.sp, lineHeight = 88.sp),
+                    style = if (compact) Type.Display.copy(fontSize = 56.sp, lineHeight = 60.sp)
+                    else Type.Display.copy(fontSize = 84.sp, lineHeight = 88.sp),
                     color = pigment,
                 )
                 Spacer(Modifier.height(6.dp))
@@ -428,8 +489,8 @@ private fun SceneVisual(story: Story, scene: Scene, pigment: Color, p: () -> Flo
                     },
                 ) {
                     Box(Modifier.size(16.dp).clip(CircleShape).background(pigment))
-                    Spacer(Modifier.height(14.dp))
-                    Text(mark.label, style = Type.Title, color = Ink.Vellum)
+                    Spacer(Modifier.height(if (compact) 8.dp else 14.dp))
+                    Text(mark.label, style = if (compact) Type.TitleSmall else Type.Title, color = Ink.Vellum)
                     Spacer(Modifier.height(4.dp))
                     Text(mark.note, style = Type.Ui, color = Ink.VellumDim)
                 }
@@ -438,10 +499,14 @@ private fun SceneVisual(story: Story, scene: Scene, pigment: Color, p: () -> Flo
 
         "bars" -> {
             val max = scene.bars.maxOfOrNull { it.value }?.takeIf { it > 0f } ?: 1f
-            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(28.dp)) {
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(if (compact) 12.dp else 28.dp)) {
                 scene.bars.forEachIndexed { i, bar ->
                     Column {
-                        Text(bar.display, style = Type.Display.copy(fontSize = 40.sp, lineHeight = 44.sp), color = Ink.Vellum)
+                        Text(
+                            bar.display,
+                            style = if (compact) Type.Title else Type.Display.copy(fontSize = 40.sp, lineHeight = 44.sp),
+                            color = Ink.Vellum,
+                        )
                         Text(bar.label, style = Type.Ui, color = Ink.VellumDim)
                         Spacer(Modifier.height(10.dp))
                         Box(
@@ -462,7 +527,7 @@ private fun SceneVisual(story: Story, scene: Scene, pigment: Color, p: () -> Flo
         }
 
         "curve" -> Column(Modifier.fillMaxWidth()) {
-            Canvas(Modifier.fillMaxWidth().aspectRatio(1.6f)) {
+            Canvas(Modifier.fillMaxWidth().aspectRatio(if (compact) 3.2f else 1.6f)) {
                 val values = scene.values
                 if (values.size >= 2) {
                     val top = values.max()
@@ -515,7 +580,7 @@ private fun SceneVisual(story: Story, scene: Scene, pigment: Color, p: () -> Flo
             }
         }
 
-        "list" -> Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        "list" -> Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(if (compact) 8.dp else 20.dp)) {
             val n = scene.items.size.coerceAtLeast(1)
             scene.items.forEachIndexed { i, item ->
                 Row(
@@ -526,9 +591,13 @@ private fun SceneVisual(story: Story, scene: Scene, pigment: Color, p: () -> Flo
                         translationX = (1f - a) * -18.dp.toPx()
                     },
                 ) {
-                    Box(Modifier.padding(top = 12.dp).size(9.dp).clip(CircleShape).background(pigment))
+                    Box(Modifier.padding(top = if (compact) 8.dp else 12.dp).size(9.dp).clip(CircleShape).background(pigment))
                     Spacer(Modifier.width(16.dp))
-                    Text(item, style = Type.Title.copy(fontSize = 29.sp, lineHeight = 35.sp), color = Ink.Vellum)
+                    Text(
+                        item,
+                        style = if (compact) Type.TitleSmall else Type.Title.copy(fontSize = 29.sp, lineHeight = 35.sp),
+                        color = Ink.Vellum,
+                    )
                 }
             }
         }
