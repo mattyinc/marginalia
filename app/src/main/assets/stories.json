@@ -1,0 +1,442 @@
+[
+ {
+  "id": "aksum",
+  "title": "The empire of Aksum",
+  "topic": "History",
+  "takeaway": "Aksum grew great by sitting where trade routes met, and it faded when the routes moved. Position is power only while the traffic lasts.",
+  "scenes": [
+   {
+    "kind": "title",
+    "say": "In the highlands of what is now northern Ethiopia and Eritrea, a kingdom rose that traded with Rome, Arabia and India."
+   },
+   {
+    "kind": "words",
+    "words": "Rome. Persia. China. Aksum.",
+    "say": "In the third century the Persian prophet Mani is said to have named four great kingdoms of the world. Aksum was one of them."
+   },
+   {
+    "kind": "list",
+    "items": [
+     "Ivory and gold going out",
+     "Cloth, wine and metal coming in",
+     "The Red Sea port of Adulis"
+    ],
+    "say": "Its wealth came through the port of Adulis on the Red Sea, where African goods met ships from the Mediterranean and the Indian Ocean."
+   },
+   {
+    "kind": "timeline",
+    "marks": [
+     {
+      "label": "c. 270",
+      "note": "First coins"
+     },
+     {
+      "label": "c. 330",
+      "note": "King Ezana becomes Christian"
+     },
+     {
+      "label": "600s",
+      "note": "Trade shifts away"
+     }
+    ],
+    "say": "Aksum struck its own gold coins from around the year 270. In the fourth century King Ezana adopted Christianity, and his coins began to carry the cross."
+   },
+   {
+    "kind": "number",
+    "from": 0,
+    "to": 24,
+    "label": "metres of carved granite, still standing",
+    "say": "Its kings raised stone towers called stelae, each cut from a single block. One that still stands is about twenty-four metres tall.",
+    "prefix": "",
+    "suffix": " m",
+    "plain": false
+   },
+   {
+    "kind": "words",
+    "words": "The roads moved. The city stayed.",
+    "say": "From the seventh century, Red Sea trade passed into other hands and Aksum's power drained away. Its church and its script lived on in Ethiopia."
+   }
+  ]
+ },
+ {
+  "id": "rome",
+  "title": "How the Roman West fell",
+  "topic": "History",
+  "takeaway": "Rome did not fall in a day. It was divided, invaded and hollowed out over two centuries, and half of it carried on for a thousand years more.",
+  "scenes": [
+   {
+    "kind": "title",
+    "say": "People speak of the fall of Rome as one event. It was closer to a slow unravelling, and only half the empire went."
+   },
+   {
+    "kind": "timeline",
+    "marks": [
+     {
+      "label": "285",
+      "note": "Empire split to be governed"
+     },
+     {
+      "label": "410",
+      "note": "Goths sack Rome"
+     },
+     {
+      "label": "455",
+      "note": "Vandals sack Rome"
+     },
+     {
+      "label": "476",
+      "note": "Last western emperor"
+     }
+    ],
+    "say": "In 285 Diocletian divided the empire to make it governable. In 410 a Gothic army sacked the city of Rome. In 476 the last western emperor was removed."
+   },
+   {
+    "kind": "number",
+    "from": 0,
+    "to": 800,
+    "label": "years since a foreign enemy had last taken the city",
+    "say": "When the Goths entered Rome in 410, no foreign enemy had taken the city in about eight hundred years. The shock was felt across the Mediterranean.",
+    "prefix": "",
+    "suffix": "",
+    "plain": true
+   },
+   {
+    "kind": "list",
+    "items": [
+     "Civil wars between rival emperors",
+     "Money that lost its value",
+     "Armies that relied on outsiders",
+     "Pressure on every frontier"
+    ],
+    "say": "Historians still argue about the causes. Most lists include civil war, a debased currency, armies recruited from outside, and constant pressure on the borders."
+   },
+   {
+    "kind": "words",
+    "words": "476 in the West. 1453 in the East.",
+    "say": "The eastern half, ruled from Constantinople, kept calling itself Roman. It lasted until 1453, almost a thousand years after the West."
+   }
+  ]
+ },
+ {
+  "id": "nicaea",
+  "title": "The Council of Nicaea",
+  "topic": "Church history",
+  "takeaway": "At Nicaea the church put into fixed words what it believed about Christ: that the Son is fully God, of one being with the Father.",
+  "scenes": [
+   {
+    "kind": "title",
+    "say": "In the year 325, bishops from across the Roman world met in the town of Nicaea to settle a question about who Jesus is."
+   },
+   {
+    "kind": "words",
+    "words": "Was the Son created, or eternal?",
+    "say": "A priest from Alexandria named Arius taught that the Son of God was made by the Father and so had a beginning. Many bishops said this could not be right."
+   },
+   {
+    "kind": "number",
+    "from": 0,
+    "to": 318,
+    "label": "bishops, by the traditional count",
+    "say": "The emperor Constantine called the council. Tradition gives the number of bishops as three hundred and eighteen. Modern estimates are somewhat lower.",
+    "prefix": "",
+    "suffix": "",
+    "plain": true
+   },
+   {
+    "kind": "words",
+    "words": "Of one being with the Father.",
+    "say": "The council answered with a creed. It declared the Son to be true God from true God, begotten and not made, of one being with the Father."
+   },
+   {
+    "kind": "timeline",
+    "marks": [
+     {
+      "label": "325",
+      "note": "Nicaea"
+     },
+     {
+      "label": "381",
+      "note": "Constantinople expands the creed"
+     },
+     {
+      "label": "Today",
+      "note": "Still recited"
+     }
+    ],
+    "say": "The argument went on for decades, and Athanasius of Alexandria spent much of his life defending the decision. In 381 a second council expanded the creed into the form recited today."
+   }
+  ]
+ },
+ {
+  "id": "press",
+  "title": "The printing press",
+  "topic": "History",
+  "takeaway": "Gutenberg made copying cheap, and cheap copies meant an idea could outrun anyone trying to stop it.",
+  "scenes": [
+   {
+    "kind": "title",
+    "say": "Around 1450, in the German city of Mainz, Johannes Gutenberg began printing with movable metal type."
+   },
+   {
+    "kind": "timeline",
+    "marks": [
+     {
+      "label": "1040s",
+      "note": "Clay type in China"
+     },
+     {
+      "label": "1377",
+      "note": "Metal type in Korea"
+     },
+     {
+      "label": "c. 1450",
+      "note": "Gutenberg's press"
+     }
+    ],
+    "say": "He was not the first to use movable type. Bi Sheng made clay type in China in the eleventh century, and a Korean book was printed from metal type in 1377."
+   },
+   {
+    "kind": "list",
+    "items": [
+     "Type cast quickly in metal",
+     "Oil-based ink that held to it",
+     "A press adapted from winemaking"
+    ],
+    "say": "What Gutenberg added was a system: a mould for casting letters fast, an ink that stuck to metal, and a screw press to make the impression."
+   },
+   {
+    "kind": "number",
+    "from": 0,
+    "to": 180,
+    "label": "copies of the Gutenberg Bible, roughly",
+    "say": "His great Bible was finished around 1455. About a hundred and eighty copies were made, in a fraction of the time a scribe would need for one.",
+    "prefix": "",
+    "suffix": "",
+    "plain": true
+   },
+   {
+    "kind": "words",
+    "words": "One monk's theses. All of Germany. A few weeks.",
+    "say": "In 1517 Martin Luther's ninety-five theses were printed and reprinted, and within weeks they were being read across Germany."
+   }
+  ]
+ },
+ {
+  "id": "compound",
+  "title": "Compound interest",
+  "topic": "Money",
+  "takeaway": "Growth that earns its own growth starts slowly and ends steeply. Most of the reward goes to whoever started earliest and waited longest.",
+  "scenes": [
+   {
+    "kind": "title",
+    "say": "Compound interest is interest that earns interest. It sounds like a small thing, and over decades it is not."
+   },
+   {
+    "kind": "words",
+    "words": "Interest on the interest.",
+    "say": "Put a thousand dollars away at seven percent. After a year you have a thousand and seventy. Next year you earn seven percent on all of it, not just the first thousand."
+   },
+   {
+    "kind": "curve",
+    "values": [
+     1000,
+     1967,
+     3870,
+     7612,
+     14974
+    ],
+    "startLabel": "Today: $1,000",
+    "endLabel": "40 years: $14,974",
+    "say": "Leave it alone and the line bends upward. Ten years nearly doubles it. Forty years turns one thousand into almost fifteen thousand."
+   },
+   {
+    "kind": "bars",
+    "bars": [
+     {
+      "label": "Interest paid out each year",
+      "value": 3800,
+      "display": "$3,800"
+     },
+     {
+      "label": "Interest left to compound",
+      "value": 14974,
+      "display": "$14,974"
+     }
+    ],
+    "say": "Take the interest out each year and after forty years you have three thousand eight hundred in total. Leave it in and you have almost four times that."
+   },
+   {
+    "kind": "number",
+    "from": 0,
+    "to": 10,
+    "label": "years to double at 7%, by the rule of 72",
+    "say": "A quick way to estimate: divide seventy-two by the rate. At seven percent, money doubles in a little over ten years.",
+    "prefix": "about ",
+    "suffix": "",
+    "plain": true
+   },
+   {
+    "kind": "words",
+    "words": "It works on debt too.",
+    "say": "The same arithmetic runs against you on a loan or a card balance. What you owe grows on itself until it is paid."
+   }
+  ]
+ },
+ {
+  "id": "tenochtitlan",
+  "title": "Tenochtitlan, the city on a lake",
+  "topic": "History",
+  "takeaway": "The Mexica turned a swampy island into one of the largest cities on earth by building with the water instead of against it.",
+  "scenes": [
+   {
+    "kind": "title",
+    "say": "Mexico City stands on the remains of another capital, one that was built on an island in the middle of a lake."
+   },
+   {
+    "kind": "timeline",
+    "marks": [
+     {
+      "label": "1325",
+      "note": "Founded, by tradition"
+     },
+     {
+      "label": "1519",
+      "note": "Spaniards arrive"
+     },
+     {
+      "label": "1521",
+      "note": "The city falls"
+     }
+    ],
+    "say": "By tradition the Mexica founded Tenochtitlan in 1325 on an island in Lake Texcoco. Less than two hundred years later it ruled an empire."
+   },
+   {
+    "kind": "list",
+    "items": [
+     "Causeways to the shore",
+     "An aqueduct from Chapultepec",
+     "Canals for streets",
+     "Floating gardens for food"
+    ],
+    "say": "Causeways tied the island to the mainland. An aqueduct carried fresh water from Chapultepec. Canoes moved goods along canals through the city."
+   },
+   {
+    "kind": "words",
+    "words": "Gardens built on water.",
+    "say": "Food grew on chinampas: beds of mud and plants raised from the shallow lake bed. They could be harvested several times a year."
+   },
+   {
+    "kind": "number",
+    "from": 0,
+    "to": 200000,
+    "label": "people, by a common estimate, in 1519",
+    "say": "When the Spaniards arrived in 1519, perhaps two hundred thousand people lived there. Few cities in Europe were as large.",
+    "prefix": "",
+    "suffix": "",
+    "plain": false
+   },
+   {
+    "kind": "words",
+    "words": "1521.",
+    "say": "In 1521, after a long siege, the city fell to Hernán Cortés and his many indigenous allies. Mexico City was built over its ruins."
+   }
+  ]
+ },
+ {
+  "id": "english-bible",
+  "title": "How the Bible came into English",
+  "topic": "Church history",
+  "takeaway": "The English Bible exists because people judged that ordinary readers should have Scripture in their own language, and some of them paid for it with their lives.",
+  "scenes": [
+   {
+    "kind": "title",
+    "say": "For most of the Middle Ages, the Bible in England was read in Latin. Putting it into English took more than two hundred years."
+   },
+   {
+    "kind": "timeline",
+    "marks": [
+     {
+      "label": "1380s",
+      "note": "Wycliffe's Bible, by hand"
+     },
+     {
+      "label": "1526",
+      "note": "Tyndale's New Testament"
+     },
+     {
+      "label": "1611",
+      "note": "King James Version"
+     }
+    ],
+    "say": "In the 1380s John Wycliffe and his followers translated it from Latin and copied it by hand. In 1526 William Tyndale's New Testament came off a printing press."
+   },
+   {
+    "kind": "words",
+    "words": "From the Greek. In print. Small enough to hide.",
+    "say": "Tyndale worked from the Greek, not the Latin, and his books were printed abroad and smuggled into England in bales of cloth."
+   },
+   {
+    "kind": "number",
+    "from": 1500,
+    "to": 1536,
+    "label": "the year Tyndale was executed",
+    "say": "The translation was banned, and Tyndale was hunted. He was arrested near Brussels and executed in 1536.",
+    "prefix": "",
+    "suffix": "",
+    "plain": true
+   },
+   {
+    "kind": "words",
+    "words": "Much of his wording survived.",
+    "say": "Within a few years English Bibles were being printed with royal approval. When the King James Version appeared in 1611, a large share of its New Testament was Tyndale's phrasing."
+   }
+  ]
+ },
+ {
+  "id": "pareto",
+  "title": "The 80/20 pattern",
+  "topic": "Ideas",
+  "takeaway": "A small share of causes usually produces most of the result. Find that share before spreading effort evenly.",
+  "scenes": [
+   {
+    "kind": "title",
+    "say": "In many situations a few causes account for most of the effect. It has a name: the Pareto principle."
+   },
+   {
+    "kind": "bars",
+    "bars": [
+     {
+      "label": "Share of landowners",
+      "value": 20,
+      "display": "20%"
+     },
+     {
+      "label": "Share of land they held",
+      "value": 80,
+      "display": "80%"
+     }
+    ],
+    "say": "In 1896 the Italian economist Vilfredo Pareto noted that about eighty percent of Italy's land belonged to about twenty percent of its people."
+   },
+   {
+    "kind": "words",
+    "words": "The vital few. The useful many.",
+    "say": "Decades later the engineer Joseph Juran saw the same shape in factory defects: a few causes produced most of the faults. He named the idea after Pareto."
+   },
+   {
+    "kind": "list",
+    "items": [
+     "A few customers bring most of the revenue",
+     "A few bugs cause most of the crashes",
+     "A few habits produce most of the progress"
+    ],
+    "say": "The pattern shows up widely. A handful of customers, bugs or habits tend to carry most of the weight."
+   },
+   {
+    "kind": "words",
+    "words": "It is a pattern, not a law.",
+    "say": "The numbers are rarely exactly eighty and twenty, and they need not add to a hundred. The point is the imbalance, and the question it raises: which few matter most?"
+   }
+  ]
+ }
+]

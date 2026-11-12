@@ -2,7 +2,8 @@
 
 Short ideas from good books, kept in the margin. A personal Android app for phone and tablet.
 
-- **Today** — a stack of idea cards. Swipe right to keep one in a stash, left to pass, tap to open.
+- **Stories** — short histories and ideas told in animated scenes and read aloud by the device's voice. Tap the right side to skip, the left to go back, hold to pause.
+- **Ideas** — a stack of idea cards. Swipe right to keep one in a stash, left to pass, tap to open.
 - **Library** — your stashes and everything in them, with search across every idea.
 - **New idea** — the gold plus button. Write down an idea from whatever you are reading.
 - **Your note** — open any idea and write beside it.
@@ -25,7 +26,13 @@ Needs JDK 17 and the Android SDK (command-line tools are enough).
 
 ## Keyboard
 
-With a keyboard attached: `←` pass, `→` keep, `Enter` open, `Esc` close, `N` new idea, `1` / `2` switch tabs.
+With a keyboard attached: `←` pass, `→` keep, `Enter` open, `Esc` close, `N` new idea, `1` / `2` / `3` switch tabs.
+
+## Stories
+
+`app/src/main/assets/stories.json` holds the stories. Each scene has a `say` line (caption and narration)
+and a `kind` that picks its drawing: `title`, `words`, `number`, `timeline`, `bars`, `curve` or `list`.
+Add a story by adding an entry to that file.
 
 ## Starter ideas
 

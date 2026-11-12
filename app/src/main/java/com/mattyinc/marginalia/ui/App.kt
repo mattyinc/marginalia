@@ -62,7 +62,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mattyinc.marginalia.MarginaliaViewModel
 
-private val TabNames = listOf("Today", "Library")
+private val TabNames = listOf("Stories", "Ideas", "Library")
 
 @Composable
 fun MarginaliaApp(vm: MarginaliaViewModel = viewModel()) {
@@ -71,9 +71,12 @@ fun MarginaliaApp(vm: MarginaliaViewModel = viewModel()) {
         val all by vm.all.collectAsStateWithLifecycle()
         val stashes by vm.stashes.collectAsStateWithLifecycle()
         val progress by vm.progress.collectAsStateWithLifecycle()
+        val stories by vm.stories.collectAsStateWithLifecycle()
+        val watched by vm.watched.collectAsStateWithLifecycle()
 
         var tab by rememberSaveable { mutableIntStateOf(0) }
         var open by remember { mutableStateOf<OpenIdea?>(null) }
+        var openStory by remember { mutableStateOf<String?>(null) }
         var capturing by rememberSaveable { mutableStateOf(false) }
         var query by rememberSaveable { mutableStateOf("") }
         var selectedStash by rememberSaveable { mutableStateOf<Long?>(null) }
@@ -82,12 +85,14 @@ fun MarginaliaApp(vm: MarginaliaViewModel = viewModel()) {
 
         // The lamplight takes the colour of whatever is in front of you.
         val tint = when {
-            tab == 0 -> feed?.firstOrNull()?.let { pigmentFor(it.topic) } ?: Ink.Gilt
+            tab == 0 -> Ink.Gilt
+            tab == 1 -> feed?.firstOrNull()?.let { pigmentFor(it.topic) } ?: Ink.Gilt
             else -> stashes.firstOrNull { it.stash.id == selectedStash }
                 ?.let { pigmentFor(it.stash.name) } ?: Ink.Gilt
         }
 
         BackHandler(enabled = open != null) { open = null }
+        BackHandler(enabled = openStory != null) { openStory = null }
         LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
 
         BoxWithConstraints(
@@ -98,12 +103,14 @@ fun MarginaliaApp(vm: MarginaliaViewModel = viewModel()) {
                 .onKeyEvent { event ->
                     if (event.type != KeyEventType.KeyDown) return@onKeyEvent false
                     when {
+                        event.key == Key.Escape && openStory != null -> { openStory = null; true }
                         event.key == Key.Escape && open != null -> { open = null; true }
-                        open != null || capturing -> false
+                        open != null || openStory != null || capturing -> false
                         event.key == Key.N -> { capturing = true; true }
                         event.key == Key.One -> { tab = 0; true }
                         event.key == Key.Two -> { tab = 1; true }
-                        tab != 0 -> false
+                        event.key == Key.Three -> { tab = 2; true }
+                        tab != 1 -> false
                         event.key == Key.DirectionRight -> { commands.fling?.invoke(1); true }
                         event.key == Key.DirectionLeft -> { commands.fling?.invoke(-1); true }
                         event.key == Key.Enter || event.key == Key.Spacebar -> { commands.open?.invoke(); true }
@@ -120,7 +127,7 @@ fun MarginaliaApp(vm: MarginaliaViewModel = viewModel()) {
             SharedTransitionLayout(Modifier.fillMaxSize()) {
                 CompositionLocalProvider(
                     LocalSharedScope provides this,
-                    LocalOpenKey provides open?.key,
+                    LocalOpenKey provides (open?.key ?: openStory?.let { "story-$it" }),
                 ) {
                     Box(Modifier.fillMaxSize()) {
                         Row(Modifier.fillMaxSize()) {
@@ -141,6 +148,14 @@ fun MarginaliaApp(vm: MarginaliaViewModel = viewModel()) {
                                 modifier = Modifier.weight(1f).fillMaxHeight(),
                             ) { current ->
                                 if (current == 0) {
+                                    StoriesScreen(
+                                        stories = stories,
+                                        watched = watched,
+                                        progress = progress,
+                                        padding = padding,
+                                        onOpen = { openStory = it.id },
+                                    )
+                                } else if (current == 1) {
                                     TodayScreen(
                                         feed = feed,
                                         progress = progress,
@@ -156,7 +171,7 @@ fun MarginaliaApp(vm: MarginaliaViewModel = viewModel()) {
                                         onStash = {
                                             selectedStash = it
                                             query = ""
-                                            tab = 1
+                                            tab = 2
                                         },
                                     )
                                 } else {
@@ -225,6 +240,31 @@ fun MarginaliaApp(vm: MarginaliaViewModel = viewModel()) {
                                 Box(Modifier.fillMaxSize())
                             }
                         }
+
+                        AnimatedContent(
+                            targetState = openStory,
+                            transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(220)) },
+                            label = "story",
+                            modifier = Modifier.fillMaxSize(),
+                        ) { storyId ->
+                            val story = stories.firstOrNull { it.id == storyId }
+                            if (story != null) {
+                                StoryPlayer(
+                                    story = story,
+                                    modifier = Modifier.sharedBounds(
+                                        sharedContentState = rememberSharedContentState(key = "story-${story.id}"),
+                                        animatedVisibilityScope = this@AnimatedContent,
+                                        boundsTransform = FolioBounds,
+                                        clipInOverlayDuringTransition = OverlayClip(FolioShape),
+                                    ),
+                                    onClose = { openStory = null },
+                                    onFinished = { vm.finishStory(story.id) },
+                                    onKeepTakeaway = { vm.keepTakeaway(story) },
+                                )
+                            } else {
+                                Box(Modifier.fillMaxSize())
+                            }
+                        }
                     }
                 }
             }
@@ -246,7 +286,7 @@ fun MarginaliaApp(vm: MarginaliaViewModel = viewModel()) {
 /** Phone navigation: a pill that floats over the page, with a marker that slides between tabs. */
 @Composable
 private fun FloatingNav(tab: Int, onTab: (Int) -> Unit, onCapture: () -> Unit, modifier: Modifier = Modifier) {
-    val itemWidth: Dp = 104.dp
+    val itemWidth: Dp = 86.dp
     Row(
         modifier
             .navigationBarsPadding()

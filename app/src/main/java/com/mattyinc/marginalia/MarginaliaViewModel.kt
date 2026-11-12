@@ -8,6 +8,10 @@ import com.mattyinc.marginalia.data.Idea
 import com.mattyinc.marginalia.data.MarginaliaDb
 import com.mattyinc.marginalia.data.Stash
 import com.mattyinc.marginalia.data.StashWithCount
+import com.mattyinc.marginalia.data.Story
+import com.mattyinc.marginalia.data.loadStories
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -40,8 +44,44 @@ class MarginaliaViewModel(app: Application) : AndroidViewModel(app) {
         .map { days -> progressFrom(days) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, Progress())
 
+    private val prefs = app.getSharedPreferences("marginalia", android.content.Context.MODE_PRIVATE)
+
+    private val _stories = MutableStateFlow<List<Story>>(emptyList())
+    val stories: StateFlow<List<Story>> = _stories.asStateFlow()
+
+    private val _watched = MutableStateFlow(prefs.getStringSet("watched", emptySet())?.toSet() ?: emptySet())
+    val watched: StateFlow<Set<String>> = _watched.asStateFlow()
+
     init {
         viewModelScope.launch { seedIfEmpty() }
+        viewModelScope.launch {
+            _stories.value = withContext(Dispatchers.IO) { loadStories(getApplication<Application>()) }
+        }
+    }
+
+    /** Reaching the end of a story counts toward today, the first time only. */
+    fun finishStory(id: String) {
+        if (id in _watched.value) return
+        val next = _watched.value + id
+        _watched.value = next
+        prefs.edit().putStringSet("watched", next).apply()
+        viewModelScope.launch(Dispatchers.IO) { countRead() }
+    }
+
+    /** Keep a story's closing idea as a card in the stash for its topic. */
+    fun keepTakeaway(story: Story) = viewModelScope.launch(Dispatchers.IO) {
+        dao.insertIdea(
+            Idea(
+                title = story.title,
+                body = story.takeaway,
+                source = "From the story",
+                topic = story.topic,
+                stashId = stashFor(story.topic),
+                seenDay = today(),
+                own = true,
+                createdAt = System.currentTimeMillis(),
+            )
+        )
     }
 
     private fun today(): Long = LocalDate.now().toEpochDay()
